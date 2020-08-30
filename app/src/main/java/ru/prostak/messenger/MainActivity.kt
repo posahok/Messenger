@@ -14,6 +14,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import ru.prostak.messenger.databinding.ActivityMainBinding
+import ru.prostak.messenger.ui.ChatsFragment
+import ru.prostak.messenger.ui.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,8 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         initFields()
         initFunc()
-        createHeader()
-        createDrawer()
+
     }
 
     private fun initFields() {
@@ -42,6 +43,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun initFunc() {
         setSupportActionBar(mToolbar)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.dataContainer, ChatsFragment()).commit()
+        createHeader()
+        createDrawer()
     }
 
     private fun createHeader() {
@@ -125,7 +130,12 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     drawerItem: IDrawerItem<*>
                 ): Boolean {
-                    Toast.makeText(applicationContext, position.toString(), Toast.LENGTH_LONG).show()
+                    when(position){
+                        7 -> supportFragmentManager.beginTransaction()
+                            .replace(R.id.dataContainer, SettingsFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    }
                     return false
                 }
             })
