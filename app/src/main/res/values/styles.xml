@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/colorAccent</item>
+        <item name="popupTheme">@style/action_menu</item>
 
         <!-- MaterialDrawer specific values -->
         <item name="material_drawer_background">@color/material_drawer_background</item>
@@ -65,5 +66,11 @@
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="action_menu"
+        parent="Theme.AppCompat.Light">
+        <item name="background">@color/colorAccent</item>
+        <item name="actionMenuTextColor">@color/colorBlack</item>
     </style>
 </resources>
