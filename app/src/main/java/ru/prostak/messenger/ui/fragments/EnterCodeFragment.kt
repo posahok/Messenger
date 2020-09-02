@@ -1,30 +1,38 @@
 package ru.prostak.messenger.ui.fragments
 
-import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_code.*
+import ru.prostak.messenger.MainActivity
 import ru.prostak.messenger.R
-import ru.prostak.messenger.utilits.AppTextWatcher
-import ru.prostak.messenger.utilits.showToast
+import ru.prostak.messenger.activities.RegisterActivity
+import ru.prostak.messenger.utilits.*
 
-class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
+class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
+    BaseFragment(R.layout.fragment_enter_code) {
+
     override fun onStart() {
         super.onStart()
+        (activity as RegisterActivity).title = mPhoneNumber
+        showSoftKeyboard(register_input_code)
         register_input_code.addTextChangedListener(AppTextWatcher {
             val string = it.toString()
             if (string.length == 6) {
-                verificateCode()
+                enterCode()
             }
         })
     }
 
-    private fun verificateCode() {
-        showToast("Ok")
+    private fun enterCode() {
+        val code = register_input_code.text.toString()
+        val credential = PhoneAuthProvider.getCredential(id, code)
+        AUTH.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                showToast("Добро пожаловать")
+                (requireActivity() as RegisterActivity).replaceActivity(MainActivity())
+            } else {
+                showToast(it.exception?.message.toString())
+            }
+        }
     }
 }
