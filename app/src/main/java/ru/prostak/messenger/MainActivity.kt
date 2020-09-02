@@ -1,23 +1,23 @@
 package ru.prostak.messenger
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import com.mikepenz.materialdrawer.AccountHeader
-import com.mikepenz.materialdrawer.AccountHeaderBuilder
-import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import com.google.firebase.auth.FirebaseAuth
+import ru.prostak.messenger.activities.RegisterActivity
 import ru.prostak.messenger.databinding.ActivityMainBinding
+import ru.prostak.messenger.ui.fragments.ChatsFragment
+import ru.prostak.messenger.ui.objects.AppDrawer
+import ru.prostak.messenger.utilits.AUTH
+import ru.prostak.messenger.utilits.replaceActivity
+import ru.prostak.messenger.utilits.replaceFragment
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
-    private lateinit var mDrawer: Drawer
-    private lateinit var mHeader: AccountHeader
+    private lateinit var mAppDrawer: AppDrawer
     private lateinit var mToolbar: Toolbar
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -28,42 +28,22 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         initFields()
         initFunc()
-        createHeader()
-        createDrawer()
+
     }
 
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
+        mAppDrawer = AppDrawer(this, mToolbar)
+        AUTH = FirebaseAuth.getInstance()
     }
 
     private fun initFunc() {
-        setSupportActionBar(mToolbar)
-    }
-
-    private fun createHeader() {
-        mHeader = AccountHeaderBuilder()
-            .withActivity(this)
-            .withHeaderBackground(R.drawable.header)
-            .addProfiles(
-                ProfileDrawerItem()
-                    .withName("Prostak Alexander")
-                    .withEmail("+78005553535")
-            ).build()
-    }
-
-    private fun createDrawer() {
-        mDrawer = DrawerBuilder()
-            .withActivity(this)
-            .withToolbar(mToolbar)
-            .withActionBarDrawerToggle(true)
-            .withSelectedItem(-1)
-            .withAccountHeader(mHeader)
-            .addDrawerItems(
-                PrimaryDrawerItem()
-                    .withIdentifier(100)
-                    .withIconTintingEnabled(true)
-                    .withName("Создать группу")
-                    .withSelectable(false)
-            ).build()
+        if (AUTH.currentUser != null) {
+            setSupportActionBar(mToolbar)
+            mAppDrawer.create()
+            replaceFragment(ChatsFragment(), false)
+        } else {
+            replaceActivity(RegisterActivity())
+        }
     }
 }
