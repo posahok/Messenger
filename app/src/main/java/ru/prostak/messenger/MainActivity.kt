@@ -8,6 +8,8 @@ import ru.prostak.messenger.activities.RegisterActivity
 import ru.prostak.messenger.databinding.ActivityMainBinding
 import ru.prostak.messenger.ui.fragments.ChatsFragment
 import ru.prostak.messenger.ui.objects.AppDrawer
+import ru.prostak.messenger.utilits.replaceActivity
+import ru.prostak.messenger.utilits.replaceFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,11 +39,9 @@ class MainActivity : AppCompatActivity() {
         if (false){
             setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.dataContainer, ChatsFragment()).commit()
+            replaceFragment(ChatsFragment())
         } else {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            replaceActivity(RegisterActivity())
         }
     }
 }

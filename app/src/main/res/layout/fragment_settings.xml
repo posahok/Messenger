@@ -27,7 +27,7 @@
             android:src="@drawable/default_photo" />
 
         <TextView
-            android:id="@+id/settings_username"
+            android:id="@+id/settings_full_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/colorAccent"
@@ -47,7 +47,7 @@
             android:textSize="@dimen/text_small"
             app:layout_constraintStart_toEndOf="@id/settings_user_photo"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/settings_username"
+            app:layout_constraintTop_toBottomOf="@id/settings_full_name"
 
             android:layout_marginStart="@dimen/horizontal_margin"/>
 
@@ -94,26 +94,26 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settings_btn_change_login"
+        android:id="@+id/settings_btn_change_username"
         app:layout_constraintTop_toBottomOf="@id/settings_btn_change_number_phone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/settings_buttons">
 
         <TextView
-            android:id="@+id/settings_login"
+            android:id="@+id/settings_username"
             android:text="@string/settings_default_login"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/text_normal" />
         <TextView
-            android:id="@+id/settings_label_login"
+            android:id="@+id/settings_label_username"
             android:text="@string/settings_label_login"
-            app:layout_constraintTop_toBottomOf="@id/settings_login"
+            app:layout_constraintTop_toBottomOf="@id/settings_username"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/text_small" />
         <View
-            app:layout_constraintTop_toBottomOf="@id/settings_label_login"
+            app:layout_constraintTop_toBottomOf="@id/settings_label_username"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             style="@style/separator" />
@@ -121,7 +121,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settings_btn_change_bio"
-        app:layout_constraintTop_toBottomOf="@id/settings_btn_change_login"
+        app:layout_constraintTop_toBottomOf="@id/settings_btn_change_username"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/settings_buttons">

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import ru.prostak.messenger.R
 import ru.prostak.messenger.databinding.ActivityRegisterBinding
 import ru.prostak.messenger.ui.fragments.EnterPhoneNumberFragment
+import ru.prostak.messenger.utilits.replaceFragment
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -23,6 +24,6 @@ class RegisterActivity : AppCompatActivity() {
         mToolbar = mBinding.registerToolbar
         setSupportActionBar(mToolbar)
         title = getString(R.string.register_title_your_phone)
-        supportFragmentManager.beginTransaction().add(R.id.registerDataContainer, EnterPhoneNumberFragment()).commit()
+        replaceFragment(EnterPhoneNumberFragment())
     }
 }

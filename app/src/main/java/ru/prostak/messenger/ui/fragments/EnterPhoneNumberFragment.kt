@@ -1,14 +1,9 @@
 package ru.prostak.messenger.ui.fragments
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_enter_code.*
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
 import ru.prostak.messenger.R
+import ru.prostak.messenger.utilits.replaceFragment
+import ru.prostak.messenger.utilits.showToast
 
 class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_number) {
 
@@ -21,12 +16,9 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
 
     private fun sendCode() {
         if (register_input_phone_number.text.toString().isEmpty()){
-            Toast.makeText(requireContext(), getString(R.string.register_toast_enter_phone), Toast.LENGTH_SHORT).show()
+            showToast(getString(R.string.register_toast_enter_phone))
         } else {
-            fragmentManager?.beginTransaction()
-                ?.replace(R.id.registerDataContainer, EnterCodeFragment())
-                ?.addToBackStack(null)
-                ?.commit()
+            replaceFragment(EnterCodeFragment())
         }
     }
 }
