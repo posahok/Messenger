@@ -1,8 +1,10 @@
 package ru.prostak.messenger
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import ru.prostak.messenger.activities.RegisterActivity
 import ru.prostak.messenger.databinding.ActivityMainBinding
 import ru.prostak.messenger.ui.fragments.ChatsFragment
 import ru.prostak.messenger.ui.objects.AppDrawer
@@ -32,9 +34,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
-        setSupportActionBar(mToolbar)
-        mAppDrawer.create()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.dataContainer, ChatsFragment()).commit()
+        if (false){
+            setSupportActionBar(mToolbar)
+            mAppDrawer.create()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.dataContainer, ChatsFragment()).commit()
+        } else {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
