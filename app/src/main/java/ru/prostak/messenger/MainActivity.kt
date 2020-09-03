@@ -10,6 +10,7 @@ import ru.prostak.messenger.databinding.ActivityMainBinding
 import ru.prostak.messenger.ui.fragments.ChatsFragment
 import ru.prostak.messenger.ui.objects.AppDrawer
 import ru.prostak.messenger.utilits.AUTH
+import ru.prostak.messenger.utilits.initFirebase
 import ru.prostak.messenger.utilits.replaceActivity
 import ru.prostak.messenger.utilits.replaceFragment
 
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer(this, mToolbar)
-        AUTH = FirebaseAuth.getInstance()
+        initFirebase()
     }
 
     private fun initFunc() {
