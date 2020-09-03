@@ -38,7 +38,7 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
                     .addOnCompleteListener { task2 ->
                         if (task2.isSuccessful) {
                             showToast("Добро пожаловать")
-                            (requireActivity() as RegisterActivity).replaceActivity(MainActivity())
+                            (activity as RegisterActivity).replaceActivity(MainActivity())
                         } else {
                             showToast(task2.exception?.message.toString())
                         }

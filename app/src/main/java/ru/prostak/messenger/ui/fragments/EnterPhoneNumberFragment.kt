@@ -21,7 +21,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
                 AUTH.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful){
                         showToast("Добро пожаловать!")
-                        (requireActivity() as RegisterActivity).replaceActivity(MainActivity())
+                        (activity as RegisterActivity).replaceActivity(MainActivity())
                     } else {
                         showToast(it.exception?.message.toString())
                     }
@@ -57,7 +57,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
             mPhoneNumber,
             60,
             TimeUnit.SECONDS,
-            requireActivity() as RegisterActivity,
+            activity as RegisterActivity,
             mCallback
         )
     }

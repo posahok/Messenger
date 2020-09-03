@@ -25,7 +25,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         when (item.itemId) {
             R.id.settings_menu_exit -> {
                 AUTH.signOut()
-                (requireActivity() as MainActivity).replaceActivity(RegisterActivity())
+                (activity as MainActivity).replaceActivity(RegisterActivity())
             }
         }
         return true

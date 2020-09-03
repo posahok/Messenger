@@ -40,7 +40,7 @@ fun Fragment.replaceFragment(fragment: Fragment){
         ?.commit()
 }
 fun Fragment.showSoftKeyboard(view: View){
-    val inputMethodManager = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputMethodManager = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     view.requestFocus()
     inputMethodManager.showSoftInput(view, 0)
 
