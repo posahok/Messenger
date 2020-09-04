@@ -9,29 +9,15 @@ import ru.prostak.messenger.utilits.*
 import java.util.*
 
 
-class ChangeUsernameFragment : BaseFragment(R.layout.fragment_change_username) {
+class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_username) {
     lateinit var mNewUsername: String
     override fun onResume() {
         super.onResume()
-        setHasOptionsMenu(true)
         settings_input_username.setText(USER.username)
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.settings_menu_confirm, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.settings_confirm_change -> {
-                change()
-            }
-        }
-        return true
-    }
-
-    private fun change() {
+    override fun change() {
         mNewUsername = settings_input_username.text.toString().toLowerCase(Locale.getDefault())
         if (mNewUsername.isEmpty()){
             showToast("Поле пустое")
