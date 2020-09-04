@@ -8,14 +8,15 @@ import ru.prostak.messenger.R
 import ru.prostak.messenger.utilits.*
 
 
-class ChangeNameFragment : Fragment(R.layout.fragment_change_name) {
+class ChangeNameFragment : BaseFragment(R.layout.fragment_change_name) {
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
         val fullnameList = USER.fullname.split(" ")
-        settings_input_name.setText(fullnameList[0])
-        settings_input_surname.setText(fullnameList[1])
-
+        if (fullnameList.size == 2){
+            settings_input_name.setText(fullnameList[0])
+            settings_input_surname.setText(fullnameList[1])
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
