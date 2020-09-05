@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -42,7 +43,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             .setAspectRatio(1, 1)
             .setRequestedSize(600, 600)
             .setCropShape(CropImageView.CropShape.OVAL)
-            .start(APP_ACTIIVTY)
+            .start(APP_ACTIVITY, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -54,12 +55,44 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         when (item.itemId) {
             R.id.settings_menu_exit -> {
                 AUTH.signOut()
-                (APP_ACTIIVTY).replaceActivity(RegisterActivity())
+                (APP_ACTIVITY).replaceActivity(RegisterActivity())
             }
             R.id.settings_menu_change_name -> {
                 replaceFragment(ChangeNameFragment())
             }
         }
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+            && resultCode == RESULT_OK
+            && data != null
+        ) {
+            val uri = CropImage.getActivityResult(data).uri
+            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
+                .child(CURRENT_UID)
+            path.putFile(uri).addOnCompleteListener { task1 ->
+                if (task1.isSuccessful) {
+                    path.downloadUrl.addOnCompleteListener { task2 ->
+                        if (task2.isSuccessful) {
+                            val photoUrl = task2.result.toString()
+                            REF_DATABASE_ROOT.child(NODE_USERS)
+                                .child(CURRENT_UID)
+                                .child(CHILD_PHOTO_URL)
+                                .setValue(photoUrl)
+                                .addOnCompleteListener { task3 ->
+                                    if (task3.isSuccessful) {
+                                        settings_user_photo.downloadAndSetImage(photoUrl)
+                                        showToast(getString(R.string.toast_data_update))
+                                        USER.photoUrl = photoUrl
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

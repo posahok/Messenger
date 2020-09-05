@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import ru.prostak.messenger.MainActivity
 import ru.prostak.messenger.R
+import ru.prostak.messenger.utilits.APP_ACTIVITY
 
 
 open class BaseFragment(layout: Int) : Fragment(layout) {
@@ -14,12 +15,12 @@ open class BaseFragment(layout: Int) : Fragment(layout) {
     override fun onStart() {
         super.onStart()
         if (activity is MainActivity)
-            (activity as MainActivity).mAppDrawer.disableDrawer()
+            APP_ACTIVITY.mAppDrawer.disableDrawer()
     }
 
     override fun onStop() {
         super.onStop()
         if (activity is MainActivity)
-            (activity as MainActivity).mAppDrawer.enableDrawer()
+            APP_ACTIVITY.mAppDrawer.enableDrawer()
     }
 }

@@ -1,23 +1,23 @@
 package ru.prostak.messenger.ui.fragments
 
-import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import ru.prostak.messenger.MainActivity
 import ru.prostak.messenger.R
-import ru.prostak.messenger.utilits.APP_ACTIIVTY
+import ru.prostak.messenger.utilits.APP_ACTIVITY
+import ru.prostak.messenger.utilits.hideKeyboard
 
 open class BaseChangeFragment(layout: Int) : Fragment(layout) {
     override fun onStart() {
         super.onStart()
         setHasOptionsMenu(true)
         if (activity is MainActivity)
-            (activity as MainActivity).mAppDrawer.disableDrawer()
+            APP_ACTIVITY.mAppDrawer.disableDrawer()
+        hideKeyboard()
     }
 
     override fun onStop() {
         super.onStop()
-        APP_ACTIIVTY.hideKeyboard()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
