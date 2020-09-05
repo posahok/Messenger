@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import ru.prostak.messenger.MainActivity
 import ru.prostak.messenger.R
+import ru.prostak.messenger.utilits.APP_ACTIIVTY
 
 open class BaseChangeFragment(layout: Int) : Fragment(layout) {
     override fun onStart() {
@@ -16,6 +17,7 @@ open class BaseChangeFragment(layout: Int) : Fragment(layout) {
 
     override fun onStop() {
         super.onStop()
+        APP_ACTIIVTY.hideKeyboard()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

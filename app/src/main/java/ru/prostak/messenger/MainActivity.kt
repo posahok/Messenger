@@ -1,13 +1,14 @@
 package ru.prostak.messenger
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import androidx.fragment.app.Fragment
+import com.theartofdev.edmodo.cropper.CropImage
 import ru.prostak.messenger.activities.RegisterActivity
 import ru.prostak.messenger.databinding.ActivityMainBinding
 import ru.prostak.messenger.models.User
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        APP_ACTIIVTY = this
         initFields()
         initFunc()
 
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUser() {
-        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
+        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
             .addListenerForSingleValueEvent(AppValueEventListener{
                 USER = it.getValue(User::class.java) ?: User()
             })
@@ -56,4 +58,26 @@ class MainActivity : AppCompatActivity() {
             replaceActivity(RegisterActivity())
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+            && resultCode == Activity.RESULT_OK
+            && data != null) {
+            val uri = CropImage.getActivityResult(data).uri
+            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
+                .child(CURRENT_UID)
+            path.putFile(uri).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    showToast(getString(R.string.toast_data_update))
+                }
+            }
+        }
+    }
+
+    fun hideKeyboard(){
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(window.decorView.windowToken, 0)
+    }
+
 }
