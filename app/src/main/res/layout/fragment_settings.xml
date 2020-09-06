@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/colorAccent"
-            android:text="@string/settings_default_username"
+            tools:text="@string/settings_default_username"
             android:textSize="@dimen/text_normal"
             app:layout_constraintStart_toEndOf="@id/settings_user_photo"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,10 +40,11 @@
             android:layout_marginStart="@dimen/horizontal_margin"/>
 
         <TextView
+            android:id="@+id/settings_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/colorAccentDark"
-            android:text="@string/settings_default_status"
+            tools:text="@string/settings_default_status"
             android:textSize="@dimen/text_small"
             app:layout_constraintStart_toEndOf="@id/settings_user_photo"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +77,7 @@
 
         <TextView
             android:id="@+id/settings_phone_number"
-            android:text="@string/settings_default_number"
+            tools:text="@string/settings_default_number"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/text_normal" />
@@ -102,7 +103,7 @@
 
         <TextView
             android:id="@+id/settings_username"
-            android:text="@string/settings_default_login"
+            tools:text="@string/settings_default_login"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/text_normal" />
@@ -128,7 +129,7 @@
 
         <TextView
             android:id="@+id/settings_bio"
-            android:text="@string/settings_default_bio"
+            tools:text="@string/settings_default_bio"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/text_normal" />

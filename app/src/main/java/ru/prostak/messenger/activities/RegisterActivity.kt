@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import ru.prostak.messenger.R
 import ru.prostak.messenger.databinding.ActivityRegisterBinding
 import ru.prostak.messenger.ui.fragments.EnterPhoneNumberFragment
+import ru.prostak.messenger.utilits.initFirebase
 import ru.prostak.messenger.utilits.replaceFragment
 
 class RegisterActivity : AppCompatActivity() {
@@ -18,6 +19,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+        initFirebase()
     }
 
     override fun onStart() {
