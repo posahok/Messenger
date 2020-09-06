@@ -29,7 +29,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         settings_phone_number.text = USER.phone
         settings_status.text = USER.status
         settings_username.text = USER.username
-        settings_user_photo.downloadAndSetImage(USER.photoUrl)
+        if (!USER.photoUrl.isEmpty())
+            settings_user_photo.downloadAndSetImage(USER.photoUrl)
         settings_btn_change_username.setOnClickListener {
             replaceFragment(ChangeUsernameFragment())
         }
@@ -83,6 +84,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
                         settings_user_photo.downloadAndSetImage(it)
                         showToast(getString(R.string.toast_data_update))
                         USER.photoUrl = it
+                        APP_ACTIVITY.mAppDrawer.updateHeader()
                     }
                 }
             }
