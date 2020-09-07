@@ -1,8 +1,14 @@
 package ru.prostak.messenger
 
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import ru.prostak.messenger.activities.RegisterActivity
 import ru.prostak.messenger.databinding.ActivityMainBinding
 import ru.prostak.messenger.models.User
@@ -22,6 +28,9 @@ class MainActivity : AppCompatActivity() {
         APP_ACTIVITY = this
         initFirebase()
         initUser{
+            CoroutineScope(Dispatchers.IO).launch {
+                initContacts()
+            }
             initFields()
             initFunc()
         }
@@ -50,6 +59,17 @@ class MainActivity : AppCompatActivity() {
             replaceFragment(ChatsFragment(), false)
         } else {
             replaceActivity(RegisterActivity())
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (ContextCompat.checkSelfPermission(APP_ACTIVITY, READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+            initContacts()
         }
     }
 }
