@@ -16,23 +16,35 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
     private lateinit var mCallback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     override fun onStart() {
         super.onStart()
+        /** Колбек - объект, методы которого будут вызываться при срабатывании одного из действий,
+         *  за которые отвечает каждая функция*/
         mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            /** Метод, вызываемый, когда:
+             * 1) происходит мнговенная верификация по номеру
+             * (может происходить в некоторых случаях без необходимости ввода кода
+             * 2) происходит автоматическое получение кода приложением без необходимости ввода кода пользователем*/
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                /** Попытка входа с использованием параметра credential - объекта с учётными данными*/
                 AUTH.signInWithCredential(credential).addOnCompleteListener {
+                    /** При успешном входе меняется активность*/
                     if (it.isSuccessful){
                         showToast("Добро пожаловать!")
                         (activity as RegisterActivity).replaceActivity(MainActivity())
-                    } else {
+                    }
+                    /** При ошибке - выводится сообщение*/
+                    else {
                         showToast(it.exception?.message.toString())
                     }
                 }
             }
-
+            /** Метод, вызываемый при ошибке верификации: выводится сообщение с ошибкой */
             override fun onVerificationFailed(p0: FirebaseException) {
                 showToast(p0.message.toString())
 
             }
-
+            /** Метод, вызываемый при отправке проверочного кода: в параметрах id и token.
+             * Id и номер телефона будут использоваться в дальнейшем
+             * для проверки совпадения номера телефона и проверочного кода*/
             override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
                 replaceFragment(EnterCodeFragment(mPhoneNumber, id))
             }
@@ -52,7 +64,9 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
     }
 
     private fun authUser() {
+        /** Сохранение введенного пользователем номера телефона в переменную mPhoneNumber */
         mPhoneNumber = register_input_phone_number.text.toString()
+        /** Верификация введенного номера, обработка полученного результата с помощью callback'a */
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             mPhoneNumber,
             60,

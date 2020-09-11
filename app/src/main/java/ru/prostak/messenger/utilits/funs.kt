@@ -10,8 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.fragment_settings.*
 import ru.prostak.messenger.R
 
 fun showToast(message: String) {
@@ -28,11 +26,11 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, addStack: Boolean = tr
     if (addStack){
         supportFragmentManager.beginTransaction()
             .addToBackStack(null)
-            .replace(R.id.dataContainer, fragment)
+            .replace(R.id.data_container, fragment)
             .commit()
     } else {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.dataContainer, fragment)
+            .replace(R.id.data_container, fragment)
             .commit()
     }
 
@@ -41,7 +39,7 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, addStack: Boolean = tr
 fun Fragment.replaceFragment(fragment: Fragment){
     fragmentManager?.beginTransaction()
         ?.addToBackStack(null)
-        ?.replace(R.id.dataContainer, fragment)
+        ?.replace(R.id.data_container, fragment)
         ?.commit()
 }
 fun Fragment.showSoftKeyboard(view: View){
