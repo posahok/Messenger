@@ -7,11 +7,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ru.prostak.messenger.activities.RegisterActivity
 import ru.prostak.messenger.databinding.ActivityMainBinding
-import ru.prostak.messenger.models.User
 import ru.prostak.messenger.ui.fragments.ChatsFragment
 import ru.prostak.messenger.ui.objects.AppDrawer
 import ru.prostak.messenger.utilits.*

@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.contact_item.view.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.models.CommonModel
+import ru.prostak.messenger.ui.fragments.single_chat.SingleChatFragment
 import ru.prostak.messenger.utilits.*
 
 
@@ -50,6 +51,8 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                 mRefUsers = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
                 mRefUsersListener = AppValueEventListener {
                     val contact = it.getCommonModel()
+                    if (contact.fullname.isEmpty())
+                        contact.fullname = model.fullname
                     holder.name.text = contact.fullname
                     holder.status.text = contact.state
                     holder.photo.downloadAndSetImage(contact.photoUrl)
