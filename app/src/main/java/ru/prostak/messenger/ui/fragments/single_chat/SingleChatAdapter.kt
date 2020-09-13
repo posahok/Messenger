@@ -9,11 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.message_item.view.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.models.CommonModel
-import ru.prostak.messenger.utilits.CURRENT_UID
-import ru.prostak.messenger.utilits.TYPE_TEXT
+import ru.prostak.messenger.database.CURRENT_UID
 import ru.prostak.messenger.utilits.asTime
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder>() {
 

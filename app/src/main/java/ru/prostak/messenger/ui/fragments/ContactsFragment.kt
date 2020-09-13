@@ -12,6 +12,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import ru.prostak.messenger.R
+import ru.prostak.messenger.database.*
 import ru.prostak.messenger.models.CommonModel
 import ru.prostak.messenger.ui.fragments.single_chat.SingleChatFragment
 import ru.prostak.messenger.utilits.*

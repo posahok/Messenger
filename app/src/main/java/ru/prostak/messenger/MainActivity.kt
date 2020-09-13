@@ -8,9 +8,12 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.prostak.messenger.activities.RegisterActivity
+import ru.prostak.messenger.database.AUTH
+import ru.prostak.messenger.database.initFirebase
+import ru.prostak.messenger.database.initUser
 import ru.prostak.messenger.databinding.ActivityMainBinding
-import ru.prostak.messenger.ui.fragments.ChatsFragment
+import ru.prostak.messenger.ui.fragments.MainFragment
+import ru.prostak.messenger.ui.fragments.register.EnterPhoneNumberFragment
 import ru.prostak.messenger.ui.objects.AppDrawer
 import ru.prostak.messenger.utilits.*
 
@@ -51,12 +54,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initFunc() {
+        setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
-            setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            replaceFragment(ChatsFragment(), false)
+            replaceFragment(MainFragment(), false)
         } else {
-            replaceActivity(RegisterActivity())
+            replaceFragment(EnterPhoneNumberFragment(), false)
         }
     }
 

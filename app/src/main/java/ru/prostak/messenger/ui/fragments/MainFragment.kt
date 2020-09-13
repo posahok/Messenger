@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import ru.prostak.messenger.R
 import ru.prostak.messenger.utilits.APP_ACTIVITY
 
-class ChatsFragment : Fragment(R.layout.fragment_chats) {
+class MainFragment : Fragment(R.layout.fragment_chats) {
 
     override fun onResume() {
         super.onResume()

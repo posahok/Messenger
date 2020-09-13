@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_single_chat.*
 import kotlinx.android.synthetic.main.toolbar_info.view.*
 import ru.prostak.messenger.R
+import ru.prostak.messenger.database.*
 import ru.prostak.messenger.models.CommonModel
 import ru.prostak.messenger.models.UserModel
 import ru.prostak.messenger.ui.fragments.BaseFragment

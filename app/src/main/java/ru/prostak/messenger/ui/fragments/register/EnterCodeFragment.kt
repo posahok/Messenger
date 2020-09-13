@@ -1,11 +1,10 @@
-package ru.prostak.messenger.ui.fragments
+package ru.prostak.messenger.ui.fragments.register
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_code.*
-import ru.prostak.messenger.MainActivity
 import ru.prostak.messenger.R
-import ru.prostak.messenger.activities.RegisterActivity
+import ru.prostak.messenger.database.*
+import ru.prostak.messenger.ui.fragments.BaseFragment
 import ru.prostak.messenger.utilits.*
 
 class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
@@ -13,7 +12,7 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
 
     override fun onStart() {
         super.onStart()
-        (activity as RegisterActivity).title = mPhoneNumber
+        APP_ACTIVITY.title = mPhoneNumber
         showSoftKeyboard(register_input_code)
         register_input_code.addTextChangedListener(AppTextWatcher {
             val string = it.toString()
@@ -50,7 +49,7 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
                         REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dataMap)
                             .addOnSuccessListener {
                                 showToast("Добро пожаловать")
-                                (activity as RegisterActivity).replaceActivity(MainActivity())
+                                restartActivity()
                             }
                             .addOnFailureListener { showToast(it.message.toString()) }
                     }

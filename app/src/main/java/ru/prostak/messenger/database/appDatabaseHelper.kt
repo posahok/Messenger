@@ -1,7 +1,6 @@
-package ru.prostak.messenger.utilits
+package ru.prostak.messenger.database
 
 import android.net.Uri
-import android.provider.ContactsContract
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
@@ -9,8 +8,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import ru.prostak.messenger.R
 import ru.prostak.messenger.models.CommonModel
 import ru.prostak.messenger.models.UserModel
+import ru.prostak.messenger.utilits.APP_ACTIVITY
+import ru.prostak.messenger.utilits.AppValueEventListener
+import ru.prostak.messenger.utilits.showToast
 
 lateinit var AUTH: FirebaseAuth
 lateinit var CURRENT_UID: String
@@ -127,5 +130,51 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     REF_DATABASE_ROOT
         .updateChildren(mapDialog)
         .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun updateCurrentUsername(newUserName: String) {
+    REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_USERNAME)
+        .setValue(newUserName)
+        .addOnCompleteListener {
+            if (it.isSuccessful){
+                showToast(APP_ACTIVITY.getString(R.string.toast_data_update))
+                deleteOldUsername(newUserName)
+            } else {
+                showToast(it.exception?.message.toString())
+            }
+        }
+}
+
+private fun deleteOldUsername(newUserName: String) {
+    REF_DATABASE_ROOT.child(NODE_USERNAMES).child(USER.username)
+        .removeValue()
+        .addOnSuccessListener {
+            showToast(APP_ACTIVITY.getString(R.string.toast_data_update))
+            APP_ACTIVITY.supportFragmentManager.popBackStack()
+            USER.username = newUserName
+        }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun setBioToDatabase(newBio: String) {
+    REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_BIO).setValue(newBio)
+        .addOnSuccessListener {
+            showToast(APP_ACTIVITY.getString(R.string.toast_data_update))
+            USER.bio = newBio
+            APP_ACTIVITY.supportFragmentManager.popBackStack()
+        }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun setNameToDatabase(fullName: String) {
+    REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_FULLNAME)
+        .setValue(fullName)
+        .addOnSuccessListener {
+            showToast(APP_ACTIVITY.getString(R.string.toast_data_update))
+            USER.fullname = fullName
+            APP_ACTIVITY.mAppDrawer.updateHeader()
+            APP_ACTIVITY.supportFragmentManager.popBackStack()
+        }
         .addOnFailureListener { showToast(it.message.toString()) }
 }

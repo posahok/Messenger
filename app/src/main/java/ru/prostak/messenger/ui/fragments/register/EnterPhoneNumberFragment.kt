@@ -1,13 +1,12 @@
-package ru.prostak.messenger.ui.fragments
+package ru.prostak.messenger.ui.fragments.register
 
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
-import ru.prostak.messenger.MainActivity
 import ru.prostak.messenger.R
-import ru.prostak.messenger.activities.RegisterActivity
+import ru.prostak.messenger.database.AUTH
+import ru.prostak.messenger.ui.fragments.BaseFragment
 import ru.prostak.messenger.utilits.*
 import java.util.concurrent.TimeUnit
 
@@ -29,7 +28,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
                     /** При успешном входе меняется активность*/
                     if (it.isSuccessful){
                         showToast("Добро пожаловать!")
-                        (activity as RegisterActivity).replaceActivity(MainActivity())
+                        restartActivity()
                     }
                     /** При ошибке - выводится сообщение*/
                     else {
@@ -71,7 +70,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
             mPhoneNumber,
             60,
             TimeUnit.SECONDS,
-            activity as RegisterActivity,
+            APP_ACTIVITY,
             mCallback
         )
     }

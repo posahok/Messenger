@@ -1,5 +1,7 @@
 package ru.prostak.messenger.utilits
 
+import ru.prostak.messenger.database.*
+
 enum class AppStates (val state: String) {
     ONLINE("В сети"),
     OFFLINE("Был недавно"),
