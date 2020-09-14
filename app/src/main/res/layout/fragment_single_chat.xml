@@ -5,18 +5,22 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.single_chat.SingleChatFragment">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chat_recyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/chat_swipe_refresh"
+        android:layout_width="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/chat_input_message"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/colorBlueWish"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/message_item"/>
+        android:layout_height="0dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/colorBlueWish"
+            tools:listitem="@layout/message_item"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
     <EditText
