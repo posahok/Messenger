@@ -2,6 +2,7 @@ package ru.prostak.messenger.ui.fragments
 
 import kotlinx.android.synthetic.main.fragment_change_name.*
 import ru.prostak.messenger.R
+import ru.prostak.messenger.database.*
 import ru.prostak.messenger.utilits.*
 
 
@@ -28,15 +29,8 @@ class ChangeNameFragment : BaseChangeFragment(R.layout.fragment_change_name) {
             showToast(getString(R.string.settings_toast_name_is_empty))
         } else {
             val fullName = "$name $surname"
-            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_FULLNAME)
-                .setValue(fullName).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        showToast(getString(R.string.toast_data_update))
-                        USER.fullname = fullName
-                        APP_ACTIVITY.mAppDrawer.updateHeader()
-                        fragmentManager?.popBackStack()
-                    }
-                }
+            setNameToDatabase(fullName)
+
         }
     }
 }
