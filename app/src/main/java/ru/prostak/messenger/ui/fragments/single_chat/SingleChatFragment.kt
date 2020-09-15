@@ -1,5 +1,7 @@
 package ru.prostak.messenger.ui.fragments.single_chat
 
+import android.app.Activity
+import android.content.Intent
 import android.view.View
 import android.widget.AbsListView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,7 +11,10 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_single_chat.*
 import kotlinx.android.synthetic.main.toolbar_info.view.*
 import ru.prostak.messenger.R
@@ -47,6 +52,26 @@ class SingleChatFragment(private val contact: CommonModel) :
     private fun initFields() {
         mSwipeRefreshLayout = chat_swipe_refresh
         mLayoutManager = LinearLayoutManager(this.context)
+        chat_input_message.addTextChangedListener(AppTextWatcher{
+            val string = it.toString()
+            if (string.isEmpty()){
+                chat_btn_send_message.visibility = View.GONE
+                chat_btn_attach.visibility = View.VISIBLE
+            } else {
+                chat_btn_send_message.visibility = View.VISIBLE
+                chat_btn_attach.visibility = View.GONE
+            }
+        })
+        chat_btn_attach.setOnClickListener {
+            attachFile()
+        }
+    }
+
+    private fun attachFile() {
+        CropImage.activity()
+            .setAspectRatio(1, 1)
+            .setRequestedSize(600, 600)
+            .start(APP_ACTIVITY, this)
     }
 
     private fun initRecyclerView() {
@@ -135,6 +160,36 @@ class SingleChatFragment(private val contact: CommonModel) :
         mToolbarInfo.toolbar_chat_status.text = mReceivingUser.state
 
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+            && resultCode == Activity.RESULT_OK
+            && data != null
+        ) {
+            val uri = CropImage.getActivityResult(data).uri
+            val messageKey = REF_DATABASE_ROOT
+                .child(NODE_MESSAGES)
+                .child(CURRENT_UID)
+                .child(contact.id)
+                .push()
+                .key
+                .toString()
+            val path = REF_STORAGE_ROOT
+                .child(FOLDER_MESSAGE_IMAGE)
+                .child(messageKey)
+
+            putImageToStorage(uri, path) {
+                getUrlFromStorage(path) {
+                    sendMessageAsImage(contact.id, it, messageKey)
+                    mSmoothScrollToPosition = true
+
+                }
+            }
+        }
+    }
+
+
 
     override fun onPause() {
         super.onPause()
