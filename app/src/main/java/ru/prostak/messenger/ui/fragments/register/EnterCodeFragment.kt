@@ -37,22 +37,29 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
                 val dataMap = mutableMapOf<String, Any>()
                 dataMap[CHILD_ID] = uid
                 dataMap[CHILD_PHONE] = mPhoneNumber
-                dataMap[CHILD_USERNAME] = uid
-                /** Работа с базой данных Firebase (запись в БД номера телефона - UID в отдельную таблицу) */
-                REF_DATABASE_ROOT.child(NODE_PHONES).child(mPhoneNumber).setValue(uid)
-                    /** При ошибке записи в БД выводится ошибка */
-                    .addOnFailureListener { showToast(it.message.toString()) }
-                    /** При успешной записи в БД номера-ID происходит запись всех
-                     *  остальных данных пользователя в другую таблицу. В свою очередь
-                     *  при успешной записи этих данных происходит переход на главную страницу приложения*/
-                    .addOnSuccessListener {
-                        REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dataMap)
-                            .addOnSuccessListener {
-                                showToast("Добро пожаловать")
-                                restartActivity()
-                            }
+
+                REF_DATABASE_ROOT.child(NODE_USERS).child(uid)
+                    .addListenerForSingleValueEvent(AppValueEventListener{
+                        if (!it.hasChild(CHILD_USERNAME)){
+                            dataMap[CHILD_USERNAME] = uid
+                        }
+                        /** Работа с базой данных Firebase (запись в БД номера телефона - UID в отдельную таблицу) */
+                        REF_DATABASE_ROOT.child(NODE_PHONES).child(mPhoneNumber).setValue(uid)
+                            /** При ошибке записи в БД выводится ошибка */
                             .addOnFailureListener { showToast(it.message.toString()) }
-                    }
+                            /** При успешной записи в БД номера-ID происходит запись всех
+                             *  остальных данных пользователя в другую таблицу. В свою очередь
+                             *  при успешной записи этих данных происходит переход на главную страницу приложения*/
+                            .addOnSuccessListener {
+                                REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dataMap)
+                                    .addOnSuccessListener {
+                                        showToast("Добро пожаловать")
+                                        restartActivity()
+                                    }
+                                    .addOnFailureListener { showToast(it.message.toString()) }
+                            }
+                    })
+
             } else {
                 showToast(task.exception?.message.toString())
             }

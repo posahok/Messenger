@@ -2,21 +2,22 @@ package ru.prostak.messenger.ui.fragments.single_chat
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
+import android.view.MotionEvent
 import android.view.View
 import android.widget.AbsListView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_single_chat.*
 import kotlinx.android.synthetic.main.toolbar_info.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.prostak.messenger.R
 import ru.prostak.messenger.database.*
 import ru.prostak.messenger.models.CommonModel
@@ -40,6 +41,7 @@ class SingleChatFragment(private val contact: CommonModel) :
     private var mSmoothScrollToPosition = true
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: LinearLayoutManager
+    private lateinit var mAppVoiceRecorder: AppVoiceRecorder
 
     override fun onResume() {
         super.onResume()
@@ -50,22 +52,51 @@ class SingleChatFragment(private val contact: CommonModel) :
     }
 
     private fun initFields() {
+        mAppVoiceRecorder = AppVoiceRecorder()
         mSwipeRefreshLayout = chat_swipe_refresh
         mLayoutManager = LinearLayoutManager(this.context)
         chat_input_message.addTextChangedListener(AppTextWatcher{
             val string = it.toString()
-            if (string.isEmpty()){
+            if (string.isEmpty() || string == "Запись"){
                 chat_btn_send_message.visibility = View.GONE
                 chat_btn_attach.visibility = View.VISIBLE
+                chat_btn_voice.visibility = View.VISIBLE
             } else {
                 chat_btn_send_message.visibility = View.VISIBLE
                 chat_btn_attach.visibility = View.GONE
+                chat_btn_voice.visibility = View.GONE
             }
         })
         chat_btn_attach.setOnClickListener {
             attachFile()
         }
+        CoroutineScope(Dispatchers.IO).launch {
+            chat_btn_voice.setOnTouchListener { v, event ->
+                if (checkPermissions(RECORD_AUDIO)){
+                    v.performClick()
+                    if (event.action == MotionEvent.ACTION_DOWN){
+                        //TODO record
+                        chat_input_message.setText("Запись")
+                        chat_btn_voice.setColorFilter(ContextCompat.getColor(APP_ACTIVITY, R.color.primary))
+                        val messageKey = getMessageKey(contact.id)
+                        mAppVoiceRecorder.startRecord(messageKey)
+                    } else if (event.action == MotionEvent.ACTION_UP){
+                        //TODO stop record
+                        chat_input_message.setText("")
+                        chat_btn_voice.colorFilter = null
+                        mAppVoiceRecorder.stopRecord(){ file, messageKey ->
+                            uploadFileToStorage(Uri.fromFile(file), messageKey)
+                        }
+                    }
+                }
+
+                true
+            }
+        }
+
     }
+
+
 
     private fun attachFile() {
         CropImage.activity()
@@ -168,13 +199,7 @@ class SingleChatFragment(private val contact: CommonModel) :
             && data != null
         ) {
             val uri = CropImage.getActivityResult(data).uri
-            val messageKey = REF_DATABASE_ROOT
-                .child(NODE_MESSAGES)
-                .child(CURRENT_UID)
-                .child(contact.id)
-                .push()
-                .key
-                .toString()
+            val messageKey = getMessageKey(contact.id)
             val path = REF_STORAGE_ROOT
                 .child(FOLDER_MESSAGE_IMAGE)
                 .child(messageKey)
@@ -191,10 +216,16 @@ class SingleChatFragment(private val contact: CommonModel) :
 
 
 
+
     override fun onPause() {
         super.onPause()
         mToolbarInfo.visibility = View.GONE
         mRefUser.removeEventListener(mListenerInfoToolbar)
         mRefMessages.removeEventListener(mMessagesListener)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mAppVoiceRecorder.releaseRecorder()
     }
 }

@@ -43,7 +43,7 @@ const val CHILD_TEXT = "text"
 const val CHILD_TYPE = "type"
 const val CHILD_FROM = "from"
 const val CHILD_TIMESTAMP = "timeStamp"
-const val CHILD_IMAGE_URL = "imageUrl"
+const val CHILD_FILE_URL = "fileUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -191,7 +191,7 @@ fun setNameToDatabase(fullName: String) {
      mapMessage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE
      mapMessage[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
      mapMessage[CHILD_ID] = messageKey
-     mapMessage[CHILD_IMAGE_URL] = imageUrl
+     mapMessage[CHILD_FILE_URL] = imageUrl
 
      val mapDialog = hashMapOf<String, Any>()
      mapDialog["$refDialogUser/$messageKey"] = mapMessage
@@ -199,4 +199,18 @@ fun setNameToDatabase(fullName: String) {
      REF_DATABASE_ROOT
          .updateChildren(mapDialog)
          .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun getMessageKey(id: String): String {
+    return REF_DATABASE_ROOT
+        .child(NODE_MESSAGES)
+        .child(CURRENT_UID)
+        .child(id)
+        .push()
+        .key
+        .toString()
+}
+
+fun uploadFileToStorage(uri: Uri, messageKey: String) {
+    showToast("Record OK")
 }
