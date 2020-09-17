@@ -23,6 +23,7 @@ import ru.prostak.messenger.database.*
 import ru.prostak.messenger.models.CommonModel
 import ru.prostak.messenger.models.UserModel
 import ru.prostak.messenger.ui.fragments.BaseFragment
+import ru.prostak.messenger.ui.fragments.message_recycler_view.views.AppViewFactory
 import ru.prostak.messenger.utilits.*
 
 class SingleChatFragment(private val contact: CommonModel) :
@@ -55,9 +56,9 @@ class SingleChatFragment(private val contact: CommonModel) :
         mAppVoiceRecorder = AppVoiceRecorder()
         mSwipeRefreshLayout = chat_swipe_refresh
         mLayoutManager = LinearLayoutManager(this.context)
-        chat_input_message.addTextChangedListener(AppTextWatcher{
+        chat_input_message.addTextChangedListener(AppTextWatcher {
             val string = it.toString()
-            if (string.isEmpty() || string == "Запись"){
+            if (string.isEmpty() || string == "Запись") {
                 chat_btn_send_message.visibility = View.GONE
                 chat_btn_attach.visibility = View.VISIBLE
                 chat_btn_voice.visibility = View.VISIBLE
@@ -72,20 +73,26 @@ class SingleChatFragment(private val contact: CommonModel) :
         }
         CoroutineScope(Dispatchers.IO).launch {
             chat_btn_voice.setOnTouchListener { v, event ->
-                if (checkPermissions(RECORD_AUDIO)){
+                if (checkPermissions(RECORD_AUDIO)) {
                     v.performClick()
-                    if (event.action == MotionEvent.ACTION_DOWN){
+                    if (event.action == MotionEvent.ACTION_DOWN) {
                         //TODO record
                         chat_input_message.setText("Запись")
-                        chat_btn_voice.setColorFilter(ContextCompat.getColor(APP_ACTIVITY, R.color.primary))
+                        chat_btn_voice.setColorFilter(
+                            ContextCompat.getColor(
+                                APP_ACTIVITY,
+                                R.color.primary
+                            )
+                        )
                         val messageKey = getMessageKey(contact.id)
                         mAppVoiceRecorder.startRecord(messageKey)
-                    } else if (event.action == MotionEvent.ACTION_UP){
+                    } else if (event.action == MotionEvent.ACTION_UP) {
                         //TODO stop record
                         chat_input_message.setText("")
                         chat_btn_voice.colorFilter = null
-                        mAppVoiceRecorder.stopRecord(){ file, messageKey ->
-                            uploadFileToStorage(Uri.fromFile(file), messageKey)
+                        mAppVoiceRecorder.stopRecord { file, messageKey ->
+                            uploadFileToStorage(Uri.fromFile(file), messageKey, contact.id, TYPE_MESSAGE_VOICE)
+                            mSmoothScrollToPosition = true
                         }
                     }
                 }
@@ -95,7 +102,6 @@ class SingleChatFragment(private val contact: CommonModel) :
         }
 
     }
-
 
 
     private fun attachFile() {
@@ -116,14 +122,14 @@ class SingleChatFragment(private val contact: CommonModel) :
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.isNestedScrollingEnabled = false
         mRecyclerView.layoutManager = mLayoutManager
-        mMessagesListener = AppChildEventListener{
+        mMessagesListener = AppChildEventListener {
             val message = it.getCommonModel()
-            if (mSmoothScrollToPosition){
-                mAdapter.addItemToBottom(message){
+            if (mSmoothScrollToPosition) {
+                mAdapter.addItemToBottom(AppViewFactory.getView(message)) {
                     mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
                 }
             } else {
-                mAdapter.addItemToTop(message){
+                mAdapter.addItemToTop(AppViewFactory.getView(message)) {
                     mSwipeRefreshLayout.isRefreshing = false
                 }
             }
@@ -131,17 +137,17 @@ class SingleChatFragment(private val contact: CommonModel) :
         }
 
         mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
-        mRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     mIsScrolling = true
                 }
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (mIsScrolling && dy < 0 && mLayoutManager.findFirstVisibleItemPosition()  <= 3) {
+                if (mIsScrolling && dy < 0 && mLayoutManager.findFirstVisibleItemPosition() <= 3) {
                     updateData()
                 }
             }
@@ -174,7 +180,7 @@ class SingleChatFragment(private val contact: CommonModel) :
             if (message.isEmpty())
                 showToast("Введите сообщение")
             else
-                sendMessage(message, contact.id, TYPE_TEXT){
+                sendMessage(message, contact.id, TYPE_TEXT) {
                     chat_input_message.setText("")
                 }
         }
@@ -200,21 +206,10 @@ class SingleChatFragment(private val contact: CommonModel) :
         ) {
             val uri = CropImage.getActivityResult(data).uri
             val messageKey = getMessageKey(contact.id)
-            val path = REF_STORAGE_ROOT
-                .child(FOLDER_MESSAGE_IMAGE)
-                .child(messageKey)
-
-            putImageToStorage(uri, path) {
-                getUrlFromStorage(path) {
-                    sendMessageAsImage(contact.id, it, messageKey)
-                    mSmoothScrollToPosition = true
-
-                }
-            }
+            uploadFileToStorage(uri, messageKey, contact.id, TYPE_MESSAGE_IMAGE)
+            mSmoothScrollToPosition = true
         }
     }
-
-
 
 
     override fun onPause() {
