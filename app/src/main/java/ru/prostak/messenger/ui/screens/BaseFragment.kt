@@ -1,12 +1,6 @@
-package ru.prostak.messenger.ui.fragments
+package ru.prostak.messenger.ui.screens
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import ru.prostak.messenger.MainActivity
-import ru.prostak.messenger.R
 import ru.prostak.messenger.database.AUTH
 import ru.prostak.messenger.utilits.APP_ACTIVITY
 

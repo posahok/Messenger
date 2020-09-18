@@ -1,4 +1,4 @@
-package ru.prostak.messenger.ui.fragments.message_recycler_view.views
+package ru.prostak.messenger.ui.message_recycler_view.views
 
 interface MessageView {
     val id: String

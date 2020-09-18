@@ -13,6 +13,7 @@ import ru.prostak.messenger.models.UserModel
 import ru.prostak.messenger.utilits.APP_ACTIVITY
 import ru.prostak.messenger.utilits.AppValueEventListener
 import ru.prostak.messenger.utilits.showToast
+import java.io.File
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -189,4 +190,11 @@ fun uploadFileToStorage(uri: Uri, messageKey: String, receivedId: String, typeMe
             sendMessageAsFile(receivedId, it, messageKey, typeMessage)
         }
     }
+}
+
+fun getFileFromStorage(mFile: File, fileUrl: String, function: () -> Unit) {
+    val path = REF_STORAGE_ROOT.storage.getReferenceFromUrl(fileUrl)
+    path.getFile(mFile)
+        .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
 }

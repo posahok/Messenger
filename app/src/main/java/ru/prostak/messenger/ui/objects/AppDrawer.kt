@@ -16,8 +16,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import ru.prostak.messenger.R
-import ru.prostak.messenger.ui.fragments.ContactsFragment
-import ru.prostak.messenger.ui.fragments.SettingsFragment
+import ru.prostak.messenger.ui.screens.ContactsFragment
+import ru.prostak.messenger.ui.screens.SettingsFragment
 import ru.prostak.messenger.utilits.APP_ACTIVITY
 import ru.prostak.messenger.database.USER
 import ru.prostak.messenger.utilits.downloadAndSetImage

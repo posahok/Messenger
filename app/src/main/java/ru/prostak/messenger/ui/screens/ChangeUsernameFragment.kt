@@ -1,4 +1,4 @@
-package ru.prostak.messenger.ui.fragments
+package ru.prostak.messenger.ui.screens
 
 import kotlinx.android.synthetic.main.fragment_change_username.*
 import ru.prostak.messenger.R

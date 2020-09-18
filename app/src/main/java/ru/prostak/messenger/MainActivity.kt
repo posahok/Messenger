@@ -12,8 +12,8 @@ import ru.prostak.messenger.database.AUTH
 import ru.prostak.messenger.database.initFirebase
 import ru.prostak.messenger.database.initUser
 import ru.prostak.messenger.databinding.ActivityMainBinding
-import ru.prostak.messenger.ui.fragments.MainFragment
-import ru.prostak.messenger.ui.fragments.register.EnterPhoneNumberFragment
+import ru.prostak.messenger.ui.screens.MainFragment
+import ru.prostak.messenger.ui.screens.register.EnterPhoneNumberFragment
 import ru.prostak.messenger.ui.objects.AppDrawer
 import ru.prostak.messenger.utilits.*
 

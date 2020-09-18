@@ -1,4 +1,4 @@
-package ru.prostak.messenger.ui.fragments.single_chat
+package ru.prostak.messenger.ui.screens.single_chat
 
 import android.app.Activity
 import android.content.Intent
@@ -22,8 +22,8 @@ import ru.prostak.messenger.R
 import ru.prostak.messenger.database.*
 import ru.prostak.messenger.models.CommonModel
 import ru.prostak.messenger.models.UserModel
-import ru.prostak.messenger.ui.fragments.BaseFragment
-import ru.prostak.messenger.ui.fragments.message_recycler_view.views.AppViewFactory
+import ru.prostak.messenger.ui.screens.BaseFragment
+import ru.prostak.messenger.ui.message_recycler_view.views.AppViewFactory
 import ru.prostak.messenger.utilits.*
 
 class SingleChatFragment(private val contact: CommonModel) :
@@ -222,5 +222,6 @@ class SingleChatFragment(private val contact: CommonModel) :
     override fun onDestroyView() {
         super.onDestroyView()
         mAppVoiceRecorder.releaseRecorder()
+        mAdapter.onDestroy()
     }
 }

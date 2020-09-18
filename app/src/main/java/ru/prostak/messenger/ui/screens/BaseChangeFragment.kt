@@ -1,4 +1,4 @@
-package ru.prostak.messenger.ui.fragments
+package ru.prostak.messenger.ui.screens
 
 import android.view.*
 import androidx.fragment.app.Fragment

@@ -1,10 +1,10 @@
-package ru.prostak.messenger.ui.fragments.register
+package ru.prostak.messenger.ui.screens.register
 
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_code.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.database.*
-import ru.prostak.messenger.ui.fragments.BaseFragment
+import ru.prostak.messenger.ui.screens.BaseFragment
 import ru.prostak.messenger.utilits.*
 
 class EnterCodeFragment(val mPhoneNumber: String, val id: String) :

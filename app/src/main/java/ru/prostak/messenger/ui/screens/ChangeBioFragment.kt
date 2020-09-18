@@ -1,9 +1,8 @@
-package ru.prostak.messenger.ui.fragments
+package ru.prostak.messenger.ui.screens
 
 import kotlinx.android.synthetic.main.fragment_change_bio.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.database.*
-import ru.prostak.messenger.utilits.*
 
 class ChangeBioFragment : BaseChangeFragment(R.layout.fragment_change_bio) {
     override fun onResume() {
