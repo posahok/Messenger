@@ -153,7 +153,11 @@ fun setNameToDatabase(fullName: String) {
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun sendMessageAsFile(receivingUserId: String, fileUrl: String, messageKey: String, typeMessage: String) {
+fun sendMessageAsFile(receivingUserId: String,
+                      fileUrl: String,
+                      messageKey: String,
+                      typeMessage: String,
+                      fileName: String) {
      val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
      val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
 
@@ -163,6 +167,7 @@ fun sendMessageAsFile(receivingUserId: String, fileUrl: String, messageKey: Stri
      mapMessage[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
      mapMessage[CHILD_ID] = messageKey
      mapMessage[CHILD_FILE_URL] = fileUrl
+     mapMessage[CHILD_TEXT] = fileName
 
      val mapDialog = hashMapOf<String, Any>()
      mapDialog["$refDialogUser/$messageKey"] = mapMessage
@@ -182,12 +187,16 @@ fun getMessageKey(id: String): String {
         .toString()
 }
 
-fun uploadFileToStorage(uri: Uri, messageKey: String, receivedId: String, typeMessage: String) {
+fun uploadFileToStorage(uri: Uri,
+                        messageKey: String,
+                        receivedId: String,
+                        typeMessage: String,
+                        fileName: String = "") {
     val path = REF_STORAGE_ROOT.child(FOLDER_FILES).child(messageKey)
 
     putFileToStorage(uri, path) {
         getUrlFromStorage(path) {
-            sendMessageAsFile(receivedId, it, messageKey, typeMessage)
+            sendMessageAsFile(receivedId, it, messageKey, typeMessage, fileName)
         }
     }
 }
