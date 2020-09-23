@@ -3,8 +3,7 @@ package ru.prostak.messenger.ui.screens.single_chat
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.widget.AbsListView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +25,8 @@ import ru.prostak.messenger.models.CommonModel
 import ru.prostak.messenger.models.UserModel
 import ru.prostak.messenger.ui.screens.BaseFragment
 import ru.prostak.messenger.ui.message_recycler_view.views.AppViewFactory
+import ru.prostak.messenger.ui.screens.main_list.MainListFragment
+import ru.prostak.messenger.ui.screens.settings.ChangeNameFragment
 import ru.prostak.messenger.utilits.*
 
 class SingleChatFragment(private val contact: CommonModel) :
@@ -56,6 +57,7 @@ class SingleChatFragment(private val contact: CommonModel) :
     }
 
     private fun initFields() {
+        setHasOptionsMenu(true)
         mBottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet_choice)
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         mAppVoiceRecorder = AppVoiceRecorder()
@@ -251,4 +253,25 @@ class SingleChatFragment(private val contact: CommonModel) :
         mAppVoiceRecorder.releaseRecorder()
         mAdapter.onDestroy()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.single_chat_action_menu, menu)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_clear_chat -> clearChat(contact.id){
+                showToast("Чат очищен")
+                replaceFragment(MainListFragment())
+            }
+            R.id.menu_delete_chat -> deleteChat(contact.id){
+                showToast("Чат удалён")
+                replaceFragment(MainListFragment())
+            }
+        }
+        return true
+    }
+
+
 }

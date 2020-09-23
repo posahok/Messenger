@@ -1,4 +1,4 @@
-package ru.prostak.messenger.ui.screens
+package ru.prostak.messenger.ui.screens.settings
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -10,6 +10,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.database.*
+import ru.prostak.messenger.ui.screens.BaseFragment
 import ru.prostak.messenger.utilits.*
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
