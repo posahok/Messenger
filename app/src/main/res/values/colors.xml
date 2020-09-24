@@ -6,6 +6,8 @@
     <color name="colorAccentDark">#CDCDCD</color>
     <color name="colorBlack">#000000</color>
     <color name="colorGreen">#8FD37E</color>
+    <color name="colorGreenDark">#65915A</color>
+
     <color name="colorGrey">#777777</color>
     <color name="colorBlueWish">#61B4D5</color>
     <!-- Material DEFAULT colors -->

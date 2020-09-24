@@ -16,10 +16,11 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import ru.prostak.messenger.R
-import ru.prostak.messenger.ui.fragments.ContactsFragment
-import ru.prostak.messenger.ui.fragments.SettingsFragment
+import ru.prostak.messenger.ui.screens.contacts.ContactsFragment
+import ru.prostak.messenger.ui.screens.settings.SettingsFragment
 import ru.prostak.messenger.utilits.APP_ACTIVITY
 import ru.prostak.messenger.database.USER
+import ru.prostak.messenger.ui.screens.groups.AddContactsFragment
 import ru.prostak.messenger.utilits.downloadAndSetImage
 import ru.prostak.messenger.utilits.replaceFragment
 
@@ -164,6 +165,7 @@ class AppDrawer() {
         when (position) {
             7 -> replaceFragment(SettingsFragment())
             4 -> replaceFragment(ContactsFragment())
+            1 -> replaceFragment(AddContactsFragment())
         }
     }
 }
