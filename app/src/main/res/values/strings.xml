@@ -26,4 +26,14 @@
     <string name="toast_data_update">Данные обновлены</string>
     <string name="settings_hint_input_username">username</string>
     <string name="settings_input_bio">bio</string>
+    <string name="clear_chat">Очистить чат</string>
+    <string name="delete_chat">Удалить чат</string>
+    <string name="create_group">Создать группу</string>
+
+    <plurals name="countMembers">
+        <item quantity="one">%d участник</item>
+        <item quantity="few">%d участника</item>
+        <item quantity="many">%d участников</item>
+        <item quantity="other">%d учатников</item>
+    </plurals>
 </resources>
