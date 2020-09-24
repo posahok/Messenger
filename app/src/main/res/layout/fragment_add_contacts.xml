@@ -7,10 +7,21 @@
     tools:context=".ui.screens.contacts.ContactsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/main_list_recycler_view"
+        android:id="@+id/add_contacts_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/main_list_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_contacts_btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_btn_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/app_margin"
+        android:backgroundTint="@color/colorPrimary"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

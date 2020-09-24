@@ -3,7 +3,7 @@ package ru.prostak.messenger.ui.screens.settings
 import kotlinx.android.synthetic.main.fragment_change_name.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.database.*
-import ru.prostak.messenger.ui.screens.BaseChangeFragment
+import ru.prostak.messenger.ui.screens.base.BaseChangeFragment
 import ru.prostak.messenger.utilits.*
 
 

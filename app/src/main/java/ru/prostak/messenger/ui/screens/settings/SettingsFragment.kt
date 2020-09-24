@@ -10,7 +10,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.database.*
-import ru.prostak.messenger.ui.screens.BaseFragment
+import ru.prostak.messenger.ui.screens.base.BaseFragment
 import ru.prostak.messenger.utilits.*
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {

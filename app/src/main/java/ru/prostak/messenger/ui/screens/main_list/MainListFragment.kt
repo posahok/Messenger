@@ -6,9 +6,7 @@ import kotlinx.android.synthetic.main.fragment_main_list.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.database.*
 import ru.prostak.messenger.models.CommonModel
-import ru.prostak.messenger.utilits.APP_ACTIVITY
-import ru.prostak.messenger.utilits.AppValueEventListener
-import ru.prostak.messenger.utilits.hideKeyboard
+import ru.prostak.messenger.utilits.*
 
 class MainListFragment : Fragment(R.layout.fragment_main_list) {
 
@@ -38,36 +36,66 @@ class MainListFragment : Fragment(R.layout.fragment_main_list) {
                 .children
                 .map { it.getCommonModel() }
             mListItems.forEach { model ->
-
-                //2 запрос
-                mRefUsers
-                    .child(model.id)
-                    .addListenerForSingleValueEvent(AppValueEventListener {dataSnapshot2 ->
-                    val newModel = dataSnapshot2.getCommonModel()
-
-                    //3 запрос
-                    mRefMessages
-                        .child(model.id)
-                        .limitToLast(1)
-                        .addListenerForSingleValueEvent(AppValueEventListener{ dataSnapshot3 ->
-                        val tempList = dataSnapshot3.children.map { it.getCommonModel() }
-                            if (tempList.isEmpty()){
-                                newModel.lastMessage = "Чат очищен"
-                            } else {
-                                newModel.lastMessage = tempList[0].text
-
-                            }
-                            if (newModel.fullname.isEmpty()) {
-                                newModel.fullname = newModel.phone
-                            }
-                        mAdapter.updateListItems(newModel)
-                    })
-                })
+                when (model.type) {
+                    TYPE_CHAT -> {
+                        showChat(model)
+                    }
+                    TYPE_GROUP -> {
+                        showGroup(model)
+                    }
+                }
             }
         })
         mRecyclerView.adapter = mAdapter
 
 
+    }
+
+    private fun showGroup(model: CommonModel) {
+        val path = REF_DATABASE_ROOT
+            .child(NODE_GROUPS)
+            .child(model.id)
+        path
+            .addListenerForSingleValueEvent(AppValueEventListener {dataSnapshot2 ->
+                val newModel = dataSnapshot2.getCommonModel()
+                path.child(NODE_MESSAGES)
+                    .limitToLast(1)
+                    .addListenerForSingleValueEvent(AppValueEventListener{ dataSnapshot3 ->
+                        val tempList = dataSnapshot3.children.map { it.getCommonModel() }
+                        if (tempList.isEmpty()){
+                            newModel.lastMessage = "Чат очищен"
+                        } else {
+                            newModel.lastMessage = tempList[0].text
+
+                        }
+                        mAdapter.updateListItems(newModel)
+                    })
+            })
+    }
+
+    private fun showChat(model: CommonModel) {
+        mRefUsers
+            .child(model.id)
+            .addListenerForSingleValueEvent(AppValueEventListener {dataSnapshot2 ->
+                val newModel = dataSnapshot2.getCommonModel()
+
+                mRefMessages
+                    .child(model.id)
+                    .limitToLast(1)
+                    .addListenerForSingleValueEvent(AppValueEventListener{ dataSnapshot3 ->
+                        val tempList = dataSnapshot3.children.map { it.getCommonModel() }
+                        if (tempList.isEmpty()){
+                            newModel.lastMessage = "Чат очищен"
+                        } else {
+                            newModel.lastMessage = tempList[0].text
+
+                        }
+                        if (newModel.fullname.isEmpty()) {
+                            newModel.fullname = newModel.phone
+                        }
+                        mAdapter.updateListItems(newModel)
+                    })
+            })
     }
 
 }

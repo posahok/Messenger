@@ -12,8 +12,10 @@ import ru.prostak.messenger.models.CommonModel
 import ru.prostak.messenger.models.UserModel
 import ru.prostak.messenger.utilits.APP_ACTIVITY
 import ru.prostak.messenger.utilits.AppValueEventListener
+import ru.prostak.messenger.utilits.TYPE_GROUP
 import ru.prostak.messenger.utilits.showToast
 import java.io.File
+import java.util.HashMap
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -254,4 +256,74 @@ fun clearChat(id: String, function: () -> Unit) {
                 .addOnFailureListener { showToast(it.message.toString()) }
                 .addOnSuccessListener { function() }
         }
+}
+
+fun createGroupToDatabase(
+    nameGroup: String,
+    mUri: Uri,
+    listContacts: List<CommonModel>,
+    function: () -> Unit
+) {
+    val groupKey = REF_DATABASE_ROOT.child(NODE_GROUPS).push().key.toString()
+
+    val path = REF_DATABASE_ROOT
+        .child(NODE_GROUPS)
+        .child(groupKey)
+    val pathStorage = REF_STORAGE_ROOT
+        .child(FOLDER_GROUPS_IMAGE)
+        .child(groupKey)
+
+    val mapData = hashMapOf<String, Any>()
+    mapData[CHILD_ID] = groupKey
+    mapData[CHILD_FULLNAME] = nameGroup
+    mapData[CHILD_PHOTO_URL] = "empty"
+    val mapMembers = hashMapOf<String, Any>()
+    listContacts.forEach {
+        mapMembers[it.id] = USER_MEMBER
+    }
+    mapMembers[CURRENT_UID] = USER_CREATOR
+    mapData[CHILD_MEMBERS] = mapMembers
+    path.updateChildren(mapData)
+        .addOnSuccessListener {
+            if (mUri != Uri.EMPTY){
+                putFileToStorage(mUri, pathStorage) {
+                    getUrlFromStorage(pathStorage) {url ->
+                        path.child(CHILD_PHOTO_URL).setValue(url)
+                        addGroupToMainList(mapData, listContacts){
+                            function()
+                        }
+                    }
+                }
+            } else {
+                addGroupToMainList(mapData, listContacts){
+                    function()
+                }
+            }
+
+        }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun addGroupToMainList(
+    mapData: HashMap<String, Any>,
+    listContacts: List<CommonModel>,
+    function: () -> Unit
+) {
+    val path = REF_DATABASE_ROOT
+        .child(NODE_MAIN_LIST)
+    val map = hashMapOf<String, Any>()
+    map[CHILD_ID] = mapData[CHILD_ID].toString()
+    map[CHILD_TYPE] = TYPE_GROUP
+    listContacts.forEach {
+        path
+            .child(it.id)
+            .child(map[CHILD_ID].toString())
+            .updateChildren(map)
+    }
+    path
+        .child(CURRENT_UID)
+        .child(map[CHILD_ID].toString())
+        .updateChildren(map)
+        .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
 }

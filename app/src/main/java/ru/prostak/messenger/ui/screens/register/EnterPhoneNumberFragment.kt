@@ -6,7 +6,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
 import ru.prostak.messenger.R
 import ru.prostak.messenger.database.AUTH
-import ru.prostak.messenger.ui.screens.BaseFragment
+import ru.prostak.messenger.ui.screens.base.BaseFragment
 import ru.prostak.messenger.utilits.*
 import java.util.concurrent.TimeUnit
 
